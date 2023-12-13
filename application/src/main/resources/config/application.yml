@@ -1,0 +1,62 @@
+clientApp:
+  name: 'bugo-data-shell'
+
+## APP ##
+server:
+  port : ${SERVER_PORT}
+  servlet:
+    context-path: /bds
+
+spring:
+  ## DB ##
+  datasource:
+    url: jdbc:postgresql://${DATABASE_IP}:${DATABASE_PORT}/dbBds
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  ## HIBERNATE ##
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: bds
+#        # If you want to save/retrieve datetime to/from db in utc
+#        jdbc:
+#          time_zone:UTC
+    hibernate:
+      ddl-auto: none
+      show-sql: true
+  application:
+    name: bds-service
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+  messages:
+    basename: bds-messages, common-messages
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${SERVICE_REGISTRY_USERNAME}:${SERVICE_REGISTRY_PASSWORD}@${SERVICE_REGISTRY_URL}:${SERVICE_REGISTRY_PORT}/eureka
+
+## LOG ##
+logging:
+  level:
+    com.pyrosandro.bds: ${LOGGING_LEVEL}
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
+
+common:
+  printstacktrace: ${COMMON_PRINTSTACKTRACE}
+## Automatic hibernate/sql logs
+## Test it with a register post and see if it logs more, when properties are set
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: DEBUG
+#        type:
+#          descriptor:
+#            sql:
+#              BasicBinder: TRACE
