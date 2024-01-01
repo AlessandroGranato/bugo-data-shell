@@ -10,9 +10,11 @@ create table bds.bds_devices (
 );
 
 create table bds.bds_users (
-    user_identifier bigint not null primary key,
+    id bigint not null default nextval('bds.bds_users_seq') primary key,
+    user_identifier varchar(50) not null,
     device_id bigint not null,
     creation_date timestamp not null default now(),
+    constraint uk_users_1 unique (user_identifier),
     constraint fk_devices foreign key (device_id) references bds.bds_devices (id)
 );
 

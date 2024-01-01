@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TemperatureVO {
 
+    private Long id;
     private DeviceVO device;
     private BigDecimal value;
     private LocalDateTime creationDate;

@@ -3,32 +3,42 @@ package com.pyrosandro.bds.model;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Objects;
 
 
 @Entity
 @Table(name = "bds_devices")
 @Getter
 @Setter
+@ToString //Remember. If you add oneToMany relationship, pay attention to the ToString (search online "Lombok @ToString oneToMany relationship")
 @NoArgsConstructor
-@RequiredArgsConstructor
-@ToString
 public class Device {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bds_device_seq_generator")
+    @SequenceGenerator(name = "bds_device_seq_generator", sequenceName = "bds_devices_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
 
-    @NotBlank
     @Size(max = 50)
+    @Column(name = "device_identifier")
     private String deviceIdentifier;
 
-    @NonNull
+    @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
-    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
-    private List<User> users;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Device device = (Device) o;
+        return Objects.equals(deviceIdentifier, device.deviceIdentifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(deviceIdentifier);
+    }
 }

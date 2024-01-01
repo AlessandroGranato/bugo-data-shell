@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class UserVO {
 
-    private Long userIdentifier;
+    private Long id;
+    private String userIdentifier;
     private DeviceVO device;
     private LocalDateTime creationDate;
 

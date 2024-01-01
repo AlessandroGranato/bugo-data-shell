@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = BdsException.class)
 @RequiredArgsConstructor
 public class DeviceServiceImpl implements DeviceService {
 
@@ -32,7 +32,7 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public DeviceVO save(DeviceVO deviceVO) throws BdsException {
         Optional<Device> deviceIdentifier = findByDeviceIdentifier(deviceVO.getDeviceIdentifier());
-        if(!deviceIdentifier.isEmpty()) {
+        if(deviceIdentifier.isPresent()) {
             throw new BdsException(BdsErrorConstants.DEVICE_ALREADY_EXISTS, new Object[]{deviceIdentifier.get().getDeviceIdentifier()}, HttpStatus.BAD_REQUEST);
         }
         Device entity = deviceRepository.save(deviceMapper.toEntity(deviceVO));
@@ -45,7 +45,7 @@ public class DeviceServiceImpl implements DeviceService {
             throw new BdsException(BdsErrorConstants.DEVICE_NOT_FOUND, new Object[]{deviceVO.getId()}, HttpStatus.NOT_FOUND);
         }
         Optional<Device> existingDeviceIdentifier = deviceRepository.findByDeviceIdentifier(deviceVO.getDeviceIdentifier());
-        if(!existingDeviceIdentifier.isEmpty() && existingDeviceIdentifier.get().getId() != deviceVO.getId()) {
+        if(existingDeviceIdentifier.isPresent() && !existingDeviceIdentifier.get().getId().equals(deviceVO.getId())) {
             throw new BdsException(BdsErrorConstants.DEVICE_IDENTIFIER_ALREADY_EXISTS, new Object[]{deviceVO.getDeviceIdentifier()}, HttpStatus.BAD_REQUEST);
         }
         Device entity = deviceRepository.save(deviceMapper.toEntity(deviceVO));
@@ -60,7 +60,7 @@ public class DeviceServiceImpl implements DeviceService {
             throw new BdsException(BdsErrorConstants.DEVICE_NOT_FOUND, new Object[]{deviceVO.getId()}, HttpStatus.NOT_FOUND);
         }
         Optional<Device> existingDeviceIdentifier = deviceRepository.findByDeviceIdentifier(deviceVO.getDeviceIdentifier());
-        if(!existingDeviceIdentifier.isEmpty() && existingDeviceIdentifier.get().getId() != deviceVO.getId()) {
+        if(existingDeviceIdentifier.isPresent() && !existingDeviceIdentifier.get().getId().equals(deviceVO.getId())) {
             throw new BdsException(BdsErrorConstants.DEVICE_IDENTIFIER_ALREADY_EXISTS, new Object[]{deviceVO.getDeviceIdentifier()}, HttpStatus.BAD_REQUEST);
         }
         Device existingDevice = optionalExistingDevice.get();
