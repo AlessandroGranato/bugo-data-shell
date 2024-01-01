@@ -2,12 +2,14 @@ package com.pyrosandro.bds.dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-public class DeviceDTO {
+public class TemperatureDTO {
 
     private Long id;
-    private String deviceIdentifier;
+    private DeviceDTO device;
+    private BigDecimal value;
     private LocalDateTime creationDate;
 }
