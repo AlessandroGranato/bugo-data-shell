@@ -1,4 +1,4 @@
-package com.pyrosandro.auth;
+package com.pyrosandro.bds;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -7,6 +7,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.PropertySource;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 /*
     * This class is used to print all the properties loaded by Spring Boot.
@@ -38,7 +40,7 @@ public class PropertyListApplicationRunner implements ApplicationRunner {
             if (propertySource instanceof EnumerablePropertySource) {
                 EnumerablePropertySource<?> enumerablePropertySource = (EnumerablePropertySource<?>) propertySource;
                 for (String propertyName : enumerablePropertySource.getPropertyNames()) {
-                    String propertyValue = enumerablePropertySource.getProperty(propertyName).toString();
+                    String propertyValue = Objects.requireNonNull(enumerablePropertySource.getProperty(propertyName)).toString();
                     System.out.println(propertyName + " = " + propertyValue);
                 }
             }
