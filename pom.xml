@@ -172,10 +172,9 @@
 
 	<distributionManagement>
 		<repository>
-			<id>my-github-common</id>
-			<name>GitHub alessandrogranato common repo</name>
-			<url>https://maven.pkg.github.com/alessandrogranato/common</url>
+			<id>my-github-repos</id>
+			<name>GitHub alessandrogranato bds repo</name>
+			<url>https://maven.pkg.github.com/alessandrogranato/bugo-data-shell</url>
 		</repository>
 	</distributionManagement>
-
 </project>
