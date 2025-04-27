@@ -93,4 +93,14 @@ public class TemperatureController {
                 .noContent()
                 .build();
     }
+
+    @GetMapping("/temperatures/device/{device-identifier}")
+    public ResponseEntity<List<TemperatureDTO>> getTemperaturesByDeviceIdentifier(@PathVariable("device-identifier") String deviceIdentifier, @RequestParam(required = false) Integer quantity) throws BdsException {
+        log.debug("REST request to get getTemperaturesByDeviceIdentifier with identifier : {} and quantity: {}", deviceIdentifier, quantity);
+        if (deviceIdentifier == null) {
+            throw new BdsException(BdsErrorConstants.MISSING_INPUT_DEVICE_IDENTIFIER, null, HttpStatus.BAD_REQUEST);
+        }
+        List<TemperatureDTO> response = dtoMapperTemperature.toDtoList(temperatureService.getTemperaturesByDeviceIdentifier(deviceIdentifier, quantity));
+        return ResponseEntity.ok().body(response);
+    }
 }

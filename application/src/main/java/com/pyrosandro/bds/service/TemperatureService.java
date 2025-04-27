@@ -22,4 +22,6 @@ public interface TemperatureService {
     TemperatureVO findOne(Long id) throws BdsException;
 
     void delete(Long id) throws BdsException;
+
+    List<TemperatureVO> getTemperaturesByDeviceIdentifier(String deviceIdentifier, Integer quantity);
 }

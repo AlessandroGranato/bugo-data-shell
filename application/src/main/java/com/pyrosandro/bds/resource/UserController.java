@@ -93,4 +93,14 @@ public class UserController {
                 .noContent()
                 .build();
     }
+
+    @GetMapping("/users/user-identifier/{user-identifier}")
+    public ResponseEntity<UserDTO> getUserByUserIdentifier(@PathVariable("user-identifier") String userIdentifier) throws BdsException {
+        log.debug("REST request to get User : {}", userIdentifier);
+        if (userIdentifier == null) {
+            throw new BdsException(BdsErrorConstants.USER_MISSING_USER_IDENTIFIER_INPUT_ID, null, HttpStatus.BAD_REQUEST);
+        }
+        UserDTO response = dtoMapperUser.toDto(userService.getUserByUserIdentifier(userIdentifier));
+        return ResponseEntity.ok().body(response);
+    }
 }
