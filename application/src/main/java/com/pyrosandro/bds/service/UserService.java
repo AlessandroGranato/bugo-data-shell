@@ -22,4 +22,6 @@ public interface UserService {
     UserVO findOne(Long id) throws BdsException;
 
     void delete(Long id) throws BdsException;
+
+    UserVO getUserByUserIdentifier(String userIdentifier) throws BdsException;
 }

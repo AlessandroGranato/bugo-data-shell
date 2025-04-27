@@ -11,6 +11,9 @@ import com.pyrosandro.bds.vo.TemperatureVO;
 import com.pyrosandro.bds.vo.mapper.EntityMapperDevice;
 import com.pyrosandro.bds.vo.mapper.EntityMapperTemperature;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +31,8 @@ public class TemperatureServiceImpl implements TemperatureService {
     private final DeviceService deviceService;
     private final EntityMapperTemperature temperatureMapper;
     private final EntityMapperDevice deviceMapper;
+    private static final int DEFAULT_TEMPERATURE_QUANTITY = 10;
+
 
     @Override
     public Optional<Temperature> findById(Long id) {
@@ -90,5 +95,13 @@ public class TemperatureServiceImpl implements TemperatureService {
             throw new BdsException(BdsErrorConstants.TEMPERATURE_NOT_FOUND, new Object[]{id}, HttpStatus.NOT_FOUND);
         }
         temperatureRepository.deleteById(id);
+    }
+
+    @Override
+    public List<TemperatureVO> getTemperaturesByDeviceIdentifier(String deviceIdentifier, Integer quantity) {
+        int limit = (quantity == null || quantity <= 0) ? DEFAULT_TEMPERATURE_QUANTITY : quantity;
+        Pageable pageable = PageRequest.of(0, limit, Sort.by("creationDate").descending());
+        List<Temperature> temperatures = temperatureRepository.findByDevice_DeviceIdentifierOrderByCreationDateDesc(deviceIdentifier, pageable);
+        return temperatureMapper.toVoList(temperatures);
     }
 }

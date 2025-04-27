@@ -107,4 +107,14 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(id);
     }
+
+    @Override
+    public UserVO getUserByUserIdentifier(String userIdentifier) throws BdsException {
+
+        Optional<User> existingUser = userRepository.findByUserIdentifier(userIdentifier);
+        if(existingUser.isEmpty()) {
+            throw new BdsException(BdsErrorConstants.USER_IDENTIFIER_NOT_FOUND, new Object[]{userIdentifier}, HttpStatus.BAD_REQUEST);
+        }
+        return userMapper.toVo(existingUser.get());
+    }
 }
